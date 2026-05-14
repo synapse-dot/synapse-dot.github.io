@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation Tools & Apps — Resources</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #060608;
+            --surface: #0d0d12;
+            --text: #e8e8ed;
+            --text-secondary: #a1a1aa;
+            --accent: #ff4545;
+            --accent-blue: #38bdf8;
+            --accent-green: #4ade80;
+            --border: #1e1e28;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            background-image: radial-gradient(circle, #1e1e28 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        /* Nav */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            padding: 1rem 2rem;
+            backdrop-filter: blur(24px);
+            background: rgba(6, 6, 8, 0.75);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .red-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: #fff; }
+
+        header {
+            padding: 10rem 2rem 5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(to bottom, var(--surface), var(--bg));
+        }
+
+        header h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 7vw, 4rem);
+            margin-bottom: 1rem;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-header {
+            margin: 4rem 0 3rem;
+            border-bottom: 1px solid var(--accent);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 6rem;
+        }
+
+        .card {
+            background-color: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border-color: var(--accent);
+        }
+
+        .card-visuals {
+            position: relative;
+            height: 250px;
+            background: #000;
+        }
+
+        .card-screenshot {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover .card-screenshot {
+            opacity: 0.9;
+        }
+
+        .card-logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            height: 60px;
+            max-width: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(8px);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .card-content {
+            padding: 2.5rem;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            color: var(--text);
+            margin: 0 0 1rem 0;
+            font-weight: 700;
+        }
+
+        .why-it-fits h4 {
+            color: var(--accent);
+            margin: 0 0 0.5rem 0;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .why-it-fits p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tag {
+            background: #1e1e28;
+            color: var(--text-secondary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+        }
+
+        .details {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .details strong {
+            color: var(--text);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-top: 1.5rem;
+        }
+
+        .details ul {
+            padding-left: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
+        .details li {
+            margin-bottom: 0.4rem;
+        }
+
+        .advantage-box {
+            background: rgba(255, 69, 69, 0.05);
+            border: 1px solid rgba(255, 69, 69, 0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .advantage-box strong {
+            display: block;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .special-note {
+            color: #ff6b6b;
+            font-style: italic;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border-left: 2px solid #ff6b6b;
+            padding-left: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 6rem 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.5rem; }
+            .grid { grid-template-columns: 1fr; }
+            .card-content { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+            <span class="red-dot"></span> synapse-dot
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="dsl-ideas.html">DSL Explorer</a></li>
+            <li><a href="simulation-club.html">Club</a></li>
+            <li><a href="simulation-tools.html">Tools</a></li>
+        </ul>
+    </div>
+</nav>
+
+<header>
+    <h1>Simulation Ecosystem</h1>
+    <p>Practical, educational, and perfectly aligned with our vision to simulate systems and explore digital complexity.</p>
+</header>
+
+<div class="container">
+    
+    <div class="section-header">
+        <h2>Highly Recommended</h2>
+    </div>
+
+    <div class="grid">
+        <!-- Blender -->
+        <div class="card">
+            <div class="card-visuals">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQueyoh0mi43ErT7jDkfZTGsxsTPfvco4XCDQ&s" alt="Blender Interface" class="card-screenshot">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBM5NQwI2Ee8Q9SaUumhB3koJjBDwWhE5Tow&s" alt="Blender Logo" class="card-logo">
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Blender</h3>
+                <div class="why-it-fits">
+                    <h4>Overview</h4>
+                    <p>Very approachable with immediate visual results. Huge community and tutorials.</p>
+                </div>
+                <div class="details">
+                    <div class="tag-list">
+                        <span class="tag">Rigid Body Physics</span>
+                        <span class="tag">Fluid Simulation</span>
+                        <span class="tag">Smoke/Fire</span>
+                        <span class="tag">Cloth</span>
+                        <span class="tag">Procedural Modelling</span>
+                        <span class="tag">Animation</span>
+                    </div>
+                    <strong>Great for:</strong>
+                    <ul>
+                        <li>Intro simulation workshops</li>
+                        <li>Physics visualization</li>
+                        <li>Game simulation concepts</li>
+                        <li>Scientific visualization</li>
+                    </ul>
+                </div>
+                <div class="advantage-box">
+                    <strong>Huge Advantage</strong>
+                    Students get visually impressive results fast, which helps club momentum.
+                </div>
+            </div>
+        </div>
+
+        <!-- OpenFOAM -->
+        <div class="card">
+            <div class="card-visuals">
+                <img src="https://www.featool.com/images/featool-openfoam-interface-edit-dictionaries.jpg" alt="OpenFOAM CFD Visualization" class="card-screenshot">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOijhBh0E4LhdGpFRR3EL62j0kogHBQ22mlQ&s" alt="OpenFOAM Logo" class="card-logo">
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">OpenFOAM</h3>
+                <div class="why-it-fits">
+                    <h4>Overview</h4>
+                    <p>This is real engineering-grade CFD used in aerospace, automotive engineering, research labs, and academia.</p>
+                </div>
+                <div class="details">
+                    <strong>Great for:</strong>
+                    <ul>
+                        <li>Airflow simulation & Aerodynamics</li>
+                        <li>Heat transfer</li>
+                        <li>Computational physics</li>
+                    </ul>
+                    <div class="special-note">
+                        This is mathematically heavy, Linux-heavy, and harder to learn. Recommended for advanced divisions.
+                    </div>
+                </div>
+                <div class="advantage-box">
+                    <strong>Value</strong>
+                    Establishes the club as technically ambitious and professionally oriented.
+                </div>
+            </div>
+        </div>
+
+        <!-- MuJoCo -->
+        <div class="card">
+            <div class="card-visuals">
+                <img src="mujoco sim.jpg" alt="MuJoCo Humanoid Simulation" class="card-screenshot">
+                <img src="mujoco logo.jpg" alt="MuJoCo Logo" class="card-logo">
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">MuJoCo</h3>
+                <div class="why-it-fits">
+                    <h4>Overview</h4>
+                    <p>Huge in robotics, reinforcement learning, AI research, and biomechanics.</p>
+                </div>
+                <div class="details">
+                    <strong>Great for:</strong>
+                    <ul>
+                        <li>Robotics simulation</li>
+                        <li>Balancing systems</li>
+                        <li>Walking robots</li>
+                        <li>Physics engines</li>
+                    </ul>
+                </div>
+                <div class="advantage-box">
+                    <strong>Massive Advantage</strong>
+                    Connects simulation, physics, and AI research seamlessly.
+                </div>
+            </div>
+        </div>
+
+        <!-- NetLogo -->
+        <div class="card">
+            <div class="card-visuals">
+                <img src="netlogo covid.jpg" alt="NetLogo Disease Simulation" class="card-screenshot">
+                <img src="netlogo logo.svg" alt="NetLogo Logo" class="card-logo">
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">NetLogo</h3>
+                <div class="why-it-fits">
+                    <h4>Best Starter Tool</h4>
+                    <p>Simulate complex systems with surprisingly little code.</p>
+                </div>
+                <div class="details">
+                    <div class="tag-list">
+                        <span class="tag">Disease Spread</span>
+                        <span class="tag">Ecosystems</span>
+                        <span class="tag">Traffic</span>
+                        <span class="tag">Economics</span>
+                        <span class="tag">Crowd Behaviour</span>
+                    </div>
+                    <strong>Perfect for:</strong>
+                    <ul>
+                        <li>Beginner workshops</li>
+                        <li>Interdisciplinary simulations</li>
+                    </ul>
+                </div>
+                <div class="advantage-box">
+                    <strong>Context</strong>
+                    Fits the "simulate systems" idea beautifully for any background.
+                </div>
+            </div>
+        </div>
+
+        <!-- SimPy -->
+        <div class="card">
+            <div class="card-visuals">
+                <img src="https://matplotlib.org/stable/_images/sphx_glr_simple_plot_001.png" alt="SimPy Output Plot" class="card-screenshot" style="background: #fff;">
+                <img src="https://simpy.readthedocs.io/en/latest/_images/simpy-logo-small.png" alt="SimPy Logo" class="card-logo">
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">SimPy</h3>
+                <div class="why-it-fits">
+                    <h4>Overview</h4>
+                    <p>Aligned with Python-heavy direction. Accessible, scriptable, and GitHub-friendly.</p>
+                </div>
+                <div class="details">
+                    <strong>Simulate:</strong>
+                    <ul>
+                        <li>Queues (Banks, Hospitals)</li>
+                        <li>CPU scheduling</li>
+                        <li>Manufacturing systems</li>
+                    </ul>
+                </div>
+                <div class="advantage-box">
+                    <strong>Educational Value</strong>
+                    Teaches events, time evolution, and software architecture.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-header">
+        <h2>Specialized Tools</h2>
+    </div>
+
+    <div class="grid">
+        <!-- FlightGear -->
+        <div class="card">
+            <div class="card-visuals">
+                <img src="flightgear sim.jpg" alt="FlightGear Cockpit" class="card-screenshot">
+                <img src="flightgear logo.png" alt="FlightGear Logo" class="card-logo">
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">FlightGear</h3>
+                <div class="details">
+                    <strong>Amazing for:</strong>
+                    <ul>
+                        <li>Aerospace enthusiasts</li>
+                        <li>Flight dynamics & Control systems</li>
+                    </ul>
+                    <div class="advantage-box">
+                        <strong>Demo Attraction</strong>
+                        Perfect for public showcases and aerospace groups.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ns-3 -->
+        <div class="card">
+            <div class="card-visuals">
+                <img src="ns-3 sim.png" alt="ns-3 NetAnim Simulation" class="card-screenshot" style="background: #fff;">
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">ns-3</h3>
+                <div class="details">
+                    <strong>Focus:</strong>
+                    <ul>
+                        <li>Networking & Internet protocols</li>
+                        <li>Packet simulations</li>
+                    </ul>
+                    <div class="special-note">Professional-grade networking simulation.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Celestia -->
+        <div class="card">
+            <div class="card-visuals">
+                <img src="celestia sim.jpg" alt="Celestia Space Visualization" class="card-screenshot">
+                <img src="celestia logo.jpg" alt="Celestia Logo" class="card-logo">
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Celestia</h3>
+                <div class="details">
+                    <strong>Outreach:</strong>
+                    <ul>
+                        <li>Astronomy & Space Exploration</li>
+                        <li>Orbital mechanics visualization</li>
+                    </ul>
+                    <div class="advantage-box">Great for presentations and attracting space enthusiasts.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 Simulation Ecosystem &bull; synapse-dot</p>
+</footer>
+
+</body>
+</html>

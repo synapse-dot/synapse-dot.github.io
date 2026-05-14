@@ -1,0 +1,146 @@
+\documentclass{article}
+\title{Simulation \& Modeling Society}
+\author{Felix A. Wayne}
+\date{\today}
+\usepackage{tcolorbox}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Core Idea}
+This is a club where you learn the art of computer simulation through building projects. E.g. -
+\begin{itemize}
+\item Simulations of Projectile Motion
+\item Gravitational Lensing Visualizer
+\item Simple Physics Engine
+\item Simulation of Spread of Covid-19
+\item Simple Simulation of Particle Collision
+\item Simple Simulation of Climate Change
+\end{itemize}
+
+A project counts as succesful when it has been correctly versioned and a github release (1.0.0) for it is properly deployed. Further, both observations and conclusions of the simulation has been noted down. A document must be maintained on the problem these projects tackle or simulate and the solution the simulation reveals or disproves.
+
+\section{Feasibility}
+During weekly or bi-weekly sessions, the foundational theoretical knowledge and mathematics would be discussed among members. (peer learning). A technical expert of sort (another student) will explain basic implementation of program and help students throughout programming process including coding and debugging. Although use of search engines is encouraged, use of LLMs and AI agents is encouraged to be limited only to debugging stage. Further, beginners can self-study programming skills as well as the relevant mathematics and physics, if they like. They could be pin pointed to the relevant resources.
+
+The minimum skill someone needs to contibute to this club is -- growth mindset. They must be ready to learn a lot about programming, math that they might not be already familiar with as well as some other fields like study of disease spread, finance, etc. They will also learn to use tools such as GitHub and skills such as contributing to open-source projects and project management. It is also encouraged that members use the Windows Subsytem for Linux or have linux distro installed on their computer (daily driving / dual booting). 
+
+In the first three meetings, the focus would be on:
+
+\begin{enumerate}
+\item A demo and getting members to form a comittee
+\item Introduction to projects (with simple demos or other quality inputs), workshops and competitions and a discussion on which project to begin with. (May be discuss that project)
+\item Internal discussion of committee on the club 
+ \end{enumerate}
+ 
+Although laptops for everyone is recomended, (BYOD model), shared laptops is also allowed. It is encouraged as well. For discussions on theory and implementations, laptops would not be needed. The coding and Github contributions might be sometimes encouraged to done at home, with enough practice and if simple enough, for convinience of members as well as for saving time. But for the first couple of months, it would be encouraged for members to code and contribute in sessions, for guidance and transparency on use of LLMs.
+
+\section{Scope}
+
+For maintaining feasibility of this club, it generally advisable to exclude following ideas:
+\begin{itemize}
+\item Publishing academic research papers on observations and conclusions.
+\item Building hardware components (It is robotics not computer simulations)
+\item Building high performance simulations
+\item Pure app/ web development
+\item Developing game engines
+\end{itemize}
+
+Instead of a game engine, the club will only develop a physics engine prototype for a simple game. However it is encouraged that members fork this project and try to build a game using this protype and improve the protype as well. Collaboration in groups is encouraged for this. It is also suggested that version of this project's releases converge to a special number such as $ \pi $ or $ e $. (Just for fun)
+
+$$ \pi = 3.14 ... $$
+$$ e = 2.718 ... $$
+ 
+\section{Projects}
+Projects will be group projects based on GitHub collaborations. This would allow group members to:
+\begin{itemize}
+\item Discuss the project, theoretical foundations and implementation together
+\item Divide labour and collaborate on the project in seperate branches
+\item Learn about pull requests, commits, merging, issues
+\item Merge pull requests and release one final project (with aid of Technical Advisor)
+
+\end{itemize}
+
+Weekly or bi-weekly mini-coding challenges would be recommended. And for projects, open-ended ones are suggested. However, the examples given are initially recomended as they might be more beginner friendly. Here, open-ended exploration project means:
+
+\vspace{0.5cm}
+\fbox{Build any world system \emph{through computer simulation}}
+
+\vspace{0.5cm}
+This way, there will be continuous exploration in the form of projects. However, every and each project's release will be a milestone. Furthermore, the club will expand to joining coding competitions as well.
+
+\section{Learning Experience}
+
+There will certainly be progression in the learning process like this for every member:
+
+\begin{math}
+Beginner \to Intermediate \to Expertise
+\end{math}
+
+\vspace{0.5cm}
+
+Members with expertise would help beginners and intermediates, creating a sort of knowledge pipeline. This means every new member will be thrown into projects and allowed to learn naturally with the guidance of expert members and technical advisors. 
+
+Committee will suggest, approve and decline projects so that important concepts could be learnt through this projects (as needed).
+
+\section{Programming Stack}
+At first (in the first project) it is planned to initially use:
+\begin{itemize}
+\item Python
+\item Git (This project would be done individually, with guidance of Technical adviser\footnote{Might be expert member, teacher or LLM})
+\end{itemize}
+
+Then, the members will be exposed to with the same project:
+\begin{itemize}
+\item Github (for collaboration, release)
+\item C++ (for optimization)\footnote{This is optional based on the project as the project my be too complex to migrate to C++ initially. In that case, a second project would be picked to use C++ and then later, members would be asked to try to migrate the very first project to C++ with the aid of LLM/Technical Advicer}
+\end{itemize}
+
+Then the students will be exposed to the same code but faulty in FORTRAN as the next project. They would be asked to fix the code and maintain it or migrate it to a language of their choice. This would be a great way for them to learn the importance of FORTRAN as a lot of legacy code is written in it. Unfortunately, this means Julia will have to be left out.\footnote{With the discretion of the committee, it could be included in some way though.}
+
+Core libraries in these langauges used for the project would be the standard ones for computer simulation.\footnote{NumPy, matplotlib, pygame, OpenGL, etc.}
+
+\section{Visibility}
+
+The club will produce / maintain:
+\begin{itemize}
+\item Public GitHub Repositories per Project
+\item Website for the club with ability to visit the simulations and information about current project
+\item Archive on previously said documents (maintained on the problems projects tackle or simulate and the solution the simulation reveals or disproves) available on website
+\end{itemize}
+that people can see.
+
+Further, for displaying the demos or projects, it is suggested consulting the science society to get an opportunity to display some on the Science day.\footnote{Though I doubt it}
+
+\vspace{0.5cm}
+\noindent
+\textbf{If someone outside asks “what has your club done?”, what do you show them?} 
+\begin{itemize}
+	\item Public GitHub Repositories on Projects
+	\item The Website for the club with ability to visit the simulations and information about current project
+	\item The Archive on previously said documents (maintained on the problems projects tackle or simulate and the solution the simulation reveals or disproves) available on website
+\end{itemize}
+
+\section{Culture}
+Exitement can fade after the initial weeks\footnote{if any}. However, devotion to the club and willingness to learn computer simulation should not. So \emph{what keeps someone excited after week 3 when novelty fades} is not a problem as sustained interest is supported through project rotation, mentorship, and varied difficulty levels 
+
+Competition (between groups), intra-school coding challenges and coding competitions (outside school) are both for fun and building skills. Here, collaborative competitions are recommended.
+
+Anyone can join and they will be taught to code and think about what they are simulating and how to. This will be made known.
+
+\section{Goal}
+\subsection{The Question}
+\begin{tcolorbox}
+Is the goal more:
+
+\begin{itemize}
+	\item education (teaching students simulation science) or
+	\item exploration (building cool systems) or
+	\item identity (creating a “research-like” student culture
+\end{itemize}
+
+\end{tcolorbox}
+
+\subsection{The Answer}
+The goal is a mix of all three.\footnote{It can be more than one, I hope.}
+\end{document}
