@@ -1,0 +1,110 @@
+:root {
+  --bg-color: #fcfaf8; /* Warm off-white */
+  --secondary-bg: #f5efe9; /* Light terracotta-tinted gray */
+  --text-color: #4a3f35; /* Dark earth tone */
+  --muted-text: #8c7d70;
+  --accent-color: #b05c48; /* Deep Terracotta */
+  --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Playfair Display', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-main);
+  margin: 0;
+  line-height: 1.7;
+  animation: fadeIn 0.8s ease-out;
+}
+
+nav {
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e0dc;
+}
+
+nav .logo {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d2620;
+  max-width: 200px;
+  line-height: 1.2;
+}
+
+nav a {
+  color: var(--muted-text);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  margin-left: 2rem;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: var(--accent-color);
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+h1, h2 {
+  font-family: var(--font-heading);
+  color: #2d2620;
+  line-height: 1.2;
+}
+
+.hero {
+  padding: 4rem 0;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent-color);
+}
+
+.btn {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background: var(--accent-color);
+  color: white;
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  transition: opacity 0.3s ease;
+  border-radius: 4px;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.card {
+  background: var(--secondary-bg);
+  border: 1px solid #e5e0dc;
+  border-radius: 8px;
+  padding: 2.5rem;
+}
+
+.card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  margin-top: 0;
+  color: var(--accent-color);
+}
+
+.muted-text {
+  color: var(--muted-text);
+  font-size: 1rem;
+}

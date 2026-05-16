@@ -2,353 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>synapse-dot (Felix A. Wayne)</title>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <style>
-        :root {
-            --bg: #060608;
-            --header-bg: #0d0d12;
-            --border: #1e1e28;
-            --text-primary: #e8e8ed;
-            --text-secondary: #a1a1aa;
-            --link: #ff4545;
-            --pinned-bg: #0d0d12;
-            --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            --accent: #ff4545;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text-primary);
-            font-family: var(--font-stack);
-            margin: 0;
-            padding: 0;
-            line-height: 1.5;
-            background-image: radial-gradient(circle, #1e1e28 1px, transparent 1px);
-            background-size: 28px 28px;
-        }
-
-        header {
-            background-color: var(--header-bg);
-            border-bottom: 1px solid var(--border);
-            padding: 16px;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 32px;
-            display: flex;
-            gap: 32px;
-        }
-
-        /* --- Sidebar --- */
-        .sidebar {
-            width: 296px;
-            margin-top: -32px;
-            z-index: 10;
-        }
-
-        .profile-pic {
-            width: 296px;
-            height: 296px;
-            border-radius: 50%;
-            border: 4px solid var(--bg);
-            background-color: var(--header-bg);
-            margin-bottom: 16px;
-            overflow: hidden;
-            display: block;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-        }
-
-        .profile-pic img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .profile-info h1 {
-            font-size: 24px;
-            margin: 0;
-            line-height: 1.25;
-            font-weight: 700;
-        }
-
-        .profile-info .username {
-            font-size: 20px;
-            color: var(--text-secondary);
-            font-weight: 300;
-        }
-
-        .profile-info .bio {
-            margin: 16px 0;
-            font-size: 16px;
-        }
-
-        .contact-list {
-            list-style: none;
-            padding: 0;
-            margin: 16px 0;
-            font-size: 14px;
-        }
-
-        .contact-list li {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-
-        .contact-list a {
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .contact-list a:hover {
-            color: var(--link);
-        }
-
-        /* --- Main Content --- */
-        .main-content {
-            flex: 1;
-            padding-top: 24px;
-        }
-
-        .nav-tabs {
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 24px;
-            display: flex;
-            gap: 16px;
-        }
-
-        .tab {
-            padding: 8px 16px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .tab.active {
-            font-weight: 600;
-            color: var(--text-primary);
-            border-bottom-color: var(--accent);
-        }
-
-        .tab:hover {
-            color: var(--text-primary);
-        }
-
-        h2 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .pinned-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        .pinned-card {
-            background-color: var(--pinned-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .pinned-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
-        }
-
-        .pinned-card.featured {
-            grid-column: span 2;
-            border-color: rgba(255, 69, 69, 0.3);
-            background: linear-gradient(135deg, rgba(255, 69, 69, 0.05), transparent);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .card-header h3 {
-            margin: 0;
-            font-size: 16px;
-        }
-
-        .card-header a {
-            color: var(--link);
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .card-header a:hover {
-            text-decoration: underline;
-        }
-
-        .card-header .label {
-            font-size: 11px;
-            border: 1px solid var(--border);
-            padding: 0 8px;
-            border-radius: 2em;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .pinned-card p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin: 0 0 20px 0;
-            flex: 1;
-            line-height: 1.6;
-        }
-
-        .card-footer {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .lang-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        footer {
-            margin-top: 64px;
-            border-top: 1px solid var(--border);
-            padding: 40px 0;
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        @media (max-width: 768px) {
-            .container { flex-direction: column; padding: 0 16px; }
-            .sidebar { width: 100%; margin-top: 24px; }
-            .profile-pic { width: 120px; height: 120px; }
-            .pinned-grid { grid-template-columns: 1fr; }
-            .pinned-card.featured { grid-column: span 1; }
-        }
-    </style>
+    <title>Simulation & Modeling Society</title>
+    <meta property="og:title" content="Simulation & Modelling Society" />
+    <meta property="og:description" content="Exploring science, engineering, and computation through simulation projects." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://synapse-dot.github.io/" />
+    <link rel="icon" type="image/png" href="images/logos/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Importing fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header></header>
+    <nav>
+        <div class="logo">Simulation & Modelling Society</div>
+        <div>
+            <a href="index.html">Home</a>
+            <a href="projects.html">Projects</a>
+            <a href="resources.html">Resources</a>
+            <a href="join.html">Join</a>
+        </div>
+    </nav>
+    <main class="container">
+        <section class="hero">
+            <h1>Simulation & Modeling Society</h1>
+            <p>Exploring science, engineering, and computation through simulation projects.</p>
+            <a href="join.html" class="btn">Join the Society</a>
+        </section>
 
-    <div class="container">
-        <aside class="sidebar">
-            <div class="profile-pic">
-                <img src="favicon.svg" alt="Profile Picture">
-            </div>
-            <div class="profile-info">
-                <h1>Felix A. Wayne</h1>
-                <div class="username">synapse-dot</div>
-                <p class="bio">Computational research, language design, and other digital artifacts.</p>
-                
-                <ul class="contact-list">
-                    <li>📧 <a href="mailto:felixx.a.wayne32@gmail.com">felixx.a.wayne32@gmail.com</a></li>
-                    <li>📞 <a href="tel:+94716526043">+94 77 652 6043</a></li>
-                    <li>🔗 <a href="https://github.com/synapse-dot">github.com/synapse-dot</a></li>
-                </ul>
-            </div>
-        </aside>
-
-        <main class="main-content">
-            <nav class="nav-tabs">
-                <a href="index.html" class="tab active">Overview</a>
-                <a href="https://github.com/synapse-dot?tab=repositories" class="tab">Repositories</a>
-                <a href="simulation-club.html" class="tab">Club</a>
-                <a href="simulation-tools.html" class="tab">Tools</a>
-            </nav>
-
-            <h2>Pinned Projects</h2>
-            <div class="pinned-grid">
-                <!-- Highlighted Local Project -->
-                <div class="pinned-card featured">
-                    <div class="card-header">
-                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" fill="currentColor" style="color: var(--accent);"><path d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path></svg>
-                        <h3><a href="dsl-ideas.html">dsl-ideas</a></h3>
-                        <span class="label">Research</span>
-                    </div>
-                    <p>Conceptual frameworks and syntax design for specialized languages. A deep dive into domain-specific language architectures.</p>
-                    <div class="card-footer">
-                        <div style="display: flex; align-items: center; gap: 4px;">
-                            <div class="lang-dot" style="background-color: var(--accent);"></div>
-                            <span>DSL Explorer</span>
-                        </div>
-                    </div>
+        <section style="margin-top: 4rem;">
+            <h2>Areas of Interest</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                <div class="card">
+                    <h3>Physics Simulations</h3>
+                    <p class="muted-text">Motion • collisions • fluids</p>
                 </div>
-
-                <div class="pinned-card">
-                    <div class="card-header">
-                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" fill="currentColor" style="color: var(--text-secondary);"><path d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path></svg>
-                        <h3><a href="simulation-club.html">simulation-club</a></h3>
-                        <span class="label">Foundation</span>
-                    </div>
-                    <p>Advancing knowledge through the synthesis of models and digital experimentation. The core vision of our simulation society.</p>
-                    <div class="card-footer">
-                        <div style="display: flex; align-items: center; gap: 4px;">
-                            <div class="lang-dot" style="background-color: #4ade80;"></div>
-                            <span>Simulation</span>
-                        </div>
-                    </div>
+                <div class="card">
+                    <h3>Real-World Systems</h3>
+                    <p class="muted-text">Climate • disease spread • ecosystems</p>
                 </div>
-
-                <div class="pinned-card">
-                    <div class="card-header">
-                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" fill="currentColor" style="color: var(--text-secondary);"><path d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path></svg>
-                        <h3><a href="simulation-tools.html">simulation-tools</a></h3>
-                        <span class="label">Resources</span>
-                    </div>
-                    <p>A curated list of simulation tools and applications suitable for various domains, from robotics to aerodynamics.</p>
-                    <div class="card-footer">
-                        <div style="display: flex; align-items: center; gap: 4px;">
-                            <div class="lang-dot" style="background-color: #60a5fa;"></div>
-                            <span>Tools</span>
-                        </div>
-                    </div>
+                <div class="card">
+                    <h3>Mathematical Models</h3>
+                    <p class="muted-text">Equations • probability • complex systems</p>
                 </div>
-
-                <!-- Real GitHub Repos -->
-                <div class="pinned-card">
-                    <div class="card-header">
-                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" fill="currentColor" style="color: var(--text-secondary);"><path d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path></svg>
-                        <h3><a href="https://github.com/synapse-dot/noe">noe</a></h3>
-                        <span class="label">Public</span>
-                    </div>
-                    <p>The programming language noether: A DSL for physics simulations.</p>
-                    <div class="card-footer">
-                        <div style="display: flex; align-items: center; gap: 4px;">
-                            <div class="lang-dot" style="background-color: #3178c6;"></div>
-                            <span>DSL</span>
-                        </div>
-                    </div>
+                <div class="card">
+                    <h3>Simulation Engines</h3>
+                    <p class="muted-text">Physics engines • rule systems • frameworks</p>
+                </div>
+                <div class="card">
+                    <h3>Scientific Visualization</h3>
+                    <p class="muted-text">Graphs • fractals • visual simulations</p>
                 </div>
             </div>
-        </main>
-    </div>
-
-    <footer>
-        &copy; 2026 synapse-dot &bull; built for the future
-    </footer>
+        </section>
+    </main>
 </body>
 </html>
