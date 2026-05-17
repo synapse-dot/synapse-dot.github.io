@@ -414,50 +414,73 @@ h3 {
 .page-title p { color: var(--muted); font-size: 1.05rem; max-width: 560px; }
 
 /* Stepper Styles */
+#stepper {
+  min-height: 400px;
+  margin-bottom: 2rem;
+}
+
 .step {
   display: none;
-  padding: 2rem;
+  padding: 3rem;
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: 12px;
+  animation: fadeUp 0.5s ease-out;
 }
 
 .step.active {
   display: block;
 }
 
+.step h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent);
+}
+
+.step p { margin-bottom: 1rem; color: var(--text); }
+.step ul, .step ol { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--muted); }
+.step code { 
+  background: var(--bg); padding: 0.2rem 0.4rem; border-radius: 4px;
+  color: var(--accent); font-family: var(--font-mono); 
+}
+.step pre {
+  background: var(--bg); padding: 1.5rem; border-radius: 8px;
+  overflow-x: auto; margin: 1rem 0; border: 1px solid var(--border);
+}
+
 .step-controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1.5rem;
-  padding: 1rem;
+  padding: 1.5rem;
   border: 1px solid var(--border);
   background: var(--surface);
+  border-radius: 12px;
 }
 
 .step-controls button {
   background: var(--accent);
-  color: var(--bg);
+  color: #050810;
   border: none;
-  padding: 0.6rem 1rem;
+  padding: 0.8rem 1.5rem;
   cursor: pointer;
   font-family: var(--font-mono);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   font-size: 0.75rem;
+  transition: opacity 0.2s;
 }
 
-.step-controls button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
+.step-controls button:hover:not(:disabled) { opacity: 0.8; }
+.step-controls button:disabled { opacity: 0.3; cursor: not-allowed; }
 
 #stepIndicator {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--muted);
+  font-weight: 600;
 }
 
 /* Why join grid */
