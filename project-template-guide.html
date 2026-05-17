@@ -180,13 +180,15 @@ git push origin project-your-name</code></pre>
       <div class="step">
         <h3>Step 7 — Register Project on Website</h3>
         <p><strong>Goal:</strong> Make your project visible on the public Projects page.</p>
-        <p><strong>What to do:</strong> Open <code>projects.html</code>. Find the project grid and add a new card:</p>
-        <ul>
-          <li>Title</li>
-          <li>Description</li>
-          <li>Tags</li>
-          <li>Link: <code>href="projects/project-your-name/"</code></li>
-        </ul>
+        <p><strong>What to do:</strong> Open <code>projects/projects-index.json</code> and add your new project object to the list:</p>
+        <pre><code>{
+  "id": "your-project-name",
+  "title": "Your Project Title",
+  "description": "Short description of your simulation.",
+  "tags": ["Tag1", "Tag2"],
+  "link": "projects/your-project-name/"
+}</code></pre>
+        <p><strong>Expect:</strong> Your project will appear automatically on the Projects page.</p>
       </div>
 
     </div>
