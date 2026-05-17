@@ -92,9 +92,10 @@
   <section style="margin-top: 5rem;">
     <h2>Step-by-step: How to use the template</h2>
 
-    <div class="card-grid">
+    <div id="stepper">
 
-      <div class="card">
+      <!-- STEP 1 -->
+      <div class="step active">
         <h3>Step 1 — Copy the template</h3>
         <p>
           Go to <code>templates/project-ex.html</code> and copy it.
@@ -102,33 +103,37 @@
         </p>
       </div>
 
-      <div class="card">
+      <!-- STEP 2 -->
+      <div class="step">
         <h3>Step 2 — Edit the title</h3>
         <p>
           Change “Project Title” to your actual project name and write a short description.
         </p>
       </div>
 
-      <div class="card">
+      <!-- STEP 3 -->
+      <div class="step">
         <h3>Step 3 — Add your links</h3>
         <p>
-          Replace placeholder links with:
+          Replace placeholders with GitHub, reports, and release version.
         </p>
-        <ul>
-          <li>GitHub repository</li>
-          <li>Release version (e.g. v1.0.0)</li>
-          <li>PDF reports</li>
-          <li>Dev logs (Markdown files)</li>
-        </ul>
       </div>
 
-      <div class="card">
-        <h3>Step 4 — Add your team</h3>
+      <!-- STEP 4 -->
+      <div class="step">
+        <h3>Step 4 — Add contributors</h3>
         <p>
-          Add contributor cards for each member working on the project.
+          Add all team members and their roles in the contributors section.
         </p>
       </div>
 
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="step-controls">
+      <button id="prevBtn" disabled>Back</button>
+      <span id="stepIndicator">Step 1 / 4</span>
+      <button id="nextBtn">Next</button>
     </div>
   </section>
 
@@ -191,6 +196,38 @@
     </div>
   </div>
 </footer>
-<script src="main.js" defer></script>
+<script>
+  const steps = document.querySelectorAll(".step");
+  const nextBtn = document.getElementById("nextBtn");
+  const prevBtn = document.getElementById("prevBtn");
+  const indicator = document.getElementById("stepIndicator");
+
+  let currentStep = 0;
+
+  function updateSteps() {
+    steps.forEach((step, index) => {
+      step.classList.toggle("active", index === currentStep);
+    });
+
+    indicator.textContent = `Step ${currentStep + 1} / ${steps.length}`;
+
+    prevBtn.disabled = currentStep === 0;
+    nextBtn.disabled = currentStep === steps.length - 1;
+  }
+
+  nextBtn.addEventListener("click", () => {
+    if (currentStep < steps.length - 1) {
+      currentStep++;
+      updateSteps();
+    }
+  });
+
+  prevBtn.addEventListener("click", () => {
+    if (currentStep > 0) {
+      currentStep--;
+      updateSteps();
+    }
+  });
+</script>
 </body>
 </html>

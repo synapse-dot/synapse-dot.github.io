@@ -413,28 +413,52 @@ h3 {
 
 .page-title p { color: var(--muted); font-size: 1.05rem; max-width: 560px; }
 
-/* Resources video */
-.video-wrap {
-  position: relative;
+/* Stepper Styles */
+.step {
+  display: none;
+  padding: 2rem;
   border: 1px solid var(--border);
-  overflow: hidden;
+  background: var(--surface);
+  border-radius: 12px;
 }
 
-.video-wrap::before {
-  content: 'VIDEO';
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
+.step.active {
+  display: block;
+}
+
+.step-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.step-controls button {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  color: var(--accent);
-  background: rgba(5,8,16,0.8);
-  padding: 0.2rem 0.5rem;
-  z-index: 2;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
 }
 
-.video-wrap video { display: block; width: 100%; }
+.step-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#stepIndicator {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
 
 /* Why join grid */
 .why-grid {
