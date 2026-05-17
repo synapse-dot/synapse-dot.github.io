@@ -23,52 +23,164 @@
 </nav>
 
 <main class="container">
+
   <div class="page-title">
     <div class="hero-label">Documentation</div>
     <h1>Project Template Guide</h1>
-    <p>How to use our project template to document and publish your simulation projects.</p>
+    <p>A simple step-by-step guide for creating and publishing a project page in the Simulation & Modelling Society website.</p>
   </div>
 
+  <!-- INTRO -->
   <section>
-    <h2>Getting Started</h2>
+    <h2>What is this page for?</h2>
+
     <div class="status-card">
-      <p>Our project template (`templates/project-ex.html`) serves as the standard structure for all society projects. It ensures consistency, ease of navigation, and professional documentation for your work.</p>
+      <p>
+        Every project in our society has its own web page.  
+        This page is like a “profile” for your project.
+      </p>
+
+      <p>
+        It contains links to your code, reports, notes, and final release — so anyone can understand what your project is and how it works.
+      </p>
     </div>
   </section>
 
+  <!-- SIMPLE OVERVIEW -->
   <section>
-    <h2>How to Use</h2>
+    <h2>What you will create</h2>
+
     <div class="card-grid">
+
       <div class="card">
-        <h3>1. Duplicate Template</h3>
-        <p>Copy <code>templates/project-ex.html</code> to your project folder and rename it (e.g., <code>project-name.html</code>).</p>
+        <h3>1. A project webpage</h3>
+        <p>A simple HTML file that describes your simulation project.</p>
       </div>
+
       <div class="card">
-        <h3>2. Edit Content</h3>
-        <p>Update the header with your project title and abstract. Fill in the links for your GitHub repo, PDF reports, and release files.</p>
+        <h3>2. A GitHub repository</h3>
+        <p>Where your actual code lives and is updated.</p>
       </div>
+
       <div class="card">
-        <h3>3. Add Contributors</h3>
-        <p>Add a <code>team-card</code> for every member who contributed to the project.</p>
+        <h3>3. Documentation files</h3>
+        <p>Reports, math notes, and development logs (PDF or Markdown).</p>
       </div>
+
     </div>
   </section>
 
+  <!-- HOW IT WORKS -->
   <section>
-    <h2>Standard Components</h2>
-    <ul style="color: var(--muted); margin-left: 2rem; margin-top: 1rem;">
-      <li><strong>Project Meta:</strong> Use the <code>status-tag</code> span to indicate if the project is in "Phase 01" or "Released".</li>
-      <li><strong>Core Resources:</strong> Always include the repository, reports (Simulation, Technical, Math), and documentation.</li>
-      <li><strong>Contributor Cards:</strong> Ensure every contributor has a profile card with their role linked.</li>
-    </ul>
+    <h2>How the system works</h2>
+
+    <div class="status-card">
+      <p>
+        Think of your project like a folder with two parts:
+      </p>
+
+      <ul>
+        <li><strong>Code (GitHub):</strong> The actual simulation program</li>
+        <li><strong>Website page:</strong> The explanation and documentation of that project</li>
+      </ul>
+
+      <p>
+        The project template connects everything together in one place.
+      </p>
+    </div>
   </section>
 
+  <!-- STEP BY STEP -->
+  <section>
+    <h2>Step-by-step: How to use the template</h2>
+
+    <div class="card-grid">
+
+      <div class="card">
+        <h3>Step 1 — Copy the template</h3>
+        <p>
+          Go to <code>templates/project-ex.html</code> and copy it.
+          Rename it to your project name (example: <code>project-pendulum.html</code>).
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Step 2 — Edit the title</h3>
+        <p>
+          Change “Project Title” to your actual project name and write a short description.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Step 3 — Add your links</h3>
+        <p>
+          Replace placeholder links with:
+        </p>
+        <ul>
+          <li>GitHub repository</li>
+          <li>Release version (e.g. v1.0.0)</li>
+          <li>PDF reports</li>
+          <li>Dev logs (Markdown files)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Step 4 — Add your team</h3>
+        <p>
+          Add contributor cards for each member working on the project.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- IMPORTANT RULES -->
+  <section>
+    <h2>Important rules</h2>
+
+    <div class="status-card">
+
+      <ul>
+        <li>Every project must have a GitHub repository</li>
+        <li>Every project must have at least one report (Simulation Report)</li>
+        <li>Every project must have a version number (example: v1.0.0)</li>
+        <li>Documentation must explain what the simulation does and what it shows</li>
+      </ul>
+
+    </div>
+  </section>
+
+  <!-- WHY THIS MATTERS -->
+  <section>
+    <h2>Why we do it this way</h2>
+
+    <div class="status-card">
+      <p>
+        This system is designed so that every project is:
+      </p>
+
+      <ul>
+        <li>Easy to understand for new members</li>
+        <li>Easy to share with others</li>
+        <li>Properly documented like real scientific work</li>
+      </ul>
+
+      <p>
+        It also helps you learn how real engineering and research projects are structured.
+      </p>
+    </div>
+  </section>
+
+  <!-- HELP -->
   <div class="cta-section">
-    <span class="corner-mark">RESOURCES</span>
-    <h2>Need Help?</h2>
-    <p>If you have any trouble setting up your project page, reach out to the lead team on WhatsApp or via email.</p>
+    <span class="corner-mark">HELP</span>
+    <h2>Still confused?</h2>
+    <p>
+      If anything feels unclear, don’t worry — this system is meant to be learned gradually while building your first project.
+    </p>
     <a href="resources.html" class="btn">Back to Resources</a>
   </div>
+
 </main>
 
 <footer class="footer">
