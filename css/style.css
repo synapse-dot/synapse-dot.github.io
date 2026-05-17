@@ -351,9 +351,31 @@ h3 {
 }
 
 
-/* Page title (non-hero pages) */
-.page-title {
-  padding: 5rem 0 3.5rem;
+/* TOC Sidebar */
+.toc-container { position: relative; display: flex; gap: 3rem; }
+.toc-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 100px;
+  height: calc(100vh - 150px);
+}
+.toc-link {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  padding: 0.5rem 0;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.toc-link.active { color: var(--accent); }
+
+.mobile-toc { display: none; margin-bottom: 2rem; border: 1px solid var(--border); background: var(--surface); padding: 1rem; }
+
+@media (max-width: 1024px) {
+  .toc-sidebar { display: none; }
+  .mobile-toc { display: block; }
 }
 
 .page-title h1 {
