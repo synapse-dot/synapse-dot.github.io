@@ -36,14 +36,24 @@
 
   <div class="toc-container">
     <aside class="toc-sidebar">
-      <h4>Table of Contents</h4>
+      <h4>Learning Dashboard</h4>
+      
+      <p style="font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 1rem; margin-bottom: 0.5rem;">Onboarding Path</p>
       <ul class="toc-list">
         <li class="toc-item"><a href="#intro" class="toc-link">Intro Video</a></li>
         <li class="toc-item"><a href="#env" class="toc-link">Environment Setup</a></li>
         <li class="toc-item"><a href="#wsl" class="toc-link">WSL Guide</a></li>
         <li class="toc-item"><a href="#ubuntu" class="toc-link">Ubuntu Guide</a></li>
+      </ul>
+
+      <p style="font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 1rem; margin-bottom: 0.5rem;">Core Thinking Tools</p>
+      <ul class="toc-list">
         <li class="toc-item"><a href="#euler" class="toc-link">Project Euler</a></li>
         <li class="toc-item"><a href="#theory" class="toc-link">Simulation Theory</a></li>
+      </ul>
+
+      <p style="font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 1rem; margin-bottom: 0.5rem;">Building & Practice</p>
+      <ul class="toc-list">
         <li class="toc-item"><a href="#template" class="toc-link">Project Guide</a></li>
       </ul>
     </aside>
@@ -52,13 +62,19 @@
       <div class="mobile-toc">
         <select onchange="window.location.hash=this.value">
           <option value="">Jump to section...</option>
-          <option value="#intro">Intro Video</option>
-          <option value="#env">Environment Setup</option>
-          <option value="#wsl">WSL Guide</option>
-          <option value="#ubuntu">Ubuntu Guide</option>
-          <option value="#euler">Project Euler</option>
-          <option value="#theory">Simulation Theory</option>
-          <option value="#template">Project Guide</option>
+          <optgroup label="Onboarding Path">
+            <option value="#intro">Intro Video</option>
+            <option value="#env">Environment Setup</option>
+            <option value="#wsl">WSL Guide</option>
+            <option value="#ubuntu">Ubuntu Guide</option>
+          </optgroup>
+          <optgroup label="Core Thinking Tools">
+            <option value="#euler">Project Euler</option>
+            <option value="#theory">Simulation Theory</option>
+          </optgroup>
+          <optgroup label="Building & Practice">
+            <option value="#template">Project Guide</option>
+          </optgroup>
         </select>
       </div>
 
