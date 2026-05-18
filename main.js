@@ -1,8 +1,8 @@
 /* ============================================================
-   main.js — Simulation & Modelling Society
+   main.js — synapse-dot
    1.  Active nav link
    2.  Mobile hamburger
-   3.  Scroll reveal
+   3.  Scroll reveal (staggered)
    4.  Canvas particle constellation + mouse repulsion
    5.  Hero mouse parallax
    6.  Typewriter cycling subtitle
@@ -10,9 +10,24 @@
    8.  Nav shrink / hide on scroll
    9.  Hero h1 glitch burst on load
    10. data-count number counter
+   11. Custom cursor (dot + ring)
+   12. Text scramble on h2 hover
+   13. Magnetic button pull
+   14. Ambient glow blobs injection
+   15. Hero accent underline animation
+   16. Konami code Easter egg
    ============================================================ */
 
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ── 0. INJECT AMBIENT BLOBS ────────────────────────────── */
+(function () {
+  [1, 2, 3].forEach(n => {
+    const b = document.createElement('div');
+    b.className = `glow-blob glow-blob-${n}`;
+    document.body.prepend(b);
+  });
+})();
 
 /* ── 1. ACTIVE NAV LINK ─────────────────────────────────── */
 (function () {
@@ -48,7 +63,7 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   });
 })();
 
-/* ── 3. SCROLL REVEAL ───────────────────────────────────── */
+/* ── 3. SCROLL REVEAL (staggered) ──────────────────────── */
 (function () {
   const targets = document.querySelectorAll(
     '.card, .why-card, .status-card, .cta-section, .video-wrap, .page-title, .section-header'
@@ -58,6 +73,14 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     return;
   }
   targets.forEach(el => el.classList.add('reveal-pending'));
+
+  // Stagger siblings in card grids
+  document.querySelectorAll('.card-grid').forEach(grid => {
+    [...grid.children].forEach((child, i) => {
+      child.style.transitionDelay = `${i * 0.08}s`;
+    });
+  });
+
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -78,6 +101,7 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   hero.prepend(canvas);
   const ctx = canvas.getContext('2d');
   const ACCENT = '99, 179, 255';
+  const WARM = '245, 158, 11';
   const COUNT_BASE = 75;
   let W, H, particles, animId;
   const mouse = { x: -999, y: -999 };
@@ -96,11 +120,12 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       this.life = 0;
       this.maxLife = rand(300, 680);
       this.a = 0;
+      this.warm = Math.random() < 0.18; // ~18% are warm-tinted
     }
     update() {
       const dx = this.x - mouse.x, dy = this.y - mouse.y;
       const d = Math.sqrt(dx * dx + dy * dy);
-      if (d < 90) { this.x += (dx / d) * 0.5; this.y += (dy / d) * 0.5; }
+      if (d < 90) { this.x += (dx / d) * 0.55; this.y += (dy / d) * 0.55; }
       this.x += this.vx;
       this.y += this.vy;
       this.life++;
@@ -111,7 +136,7 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     draw() {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${ACCENT}, ${this.a})`;
+      ctx.fillStyle = `rgba(${this.warm ? WARM : ACCENT}, ${this.a})`;
       ctx.fill();
     }
   }
@@ -133,7 +158,7 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = `rgba(${ACCENT}, ${op})`;
+          ctx.strokeStyle = `rgba(${a.warm || b.warm ? WARM : ACCENT}, ${op})`;
           ctx.lineWidth = 0.7;
           ctx.stroke();
         }
@@ -227,6 +252,7 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     'Particle Collision Systems',
     'Climate & CO₂ Modelling',
     'Mathematical Chaos Theory',
+    'Accidental tiny universes',
   ];
 
   const wrap = document.createElement('div');
@@ -294,6 +320,10 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     h1.classList.add('glitch-burst');
     setTimeout(() => h1.classList.remove('glitch-burst'), 800);
   }, 450);
+
+  // Trigger underline animation on accent span
+  const span = h1.querySelector('span');
+  if (span) setTimeout(() => span.classList.add('underline-in'), 900);
 })();
 
 /* ── 10. data-count COUNTER ANIMATION ───────────────────── */
@@ -316,4 +346,166 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     });
   }, { threshold: 0.5 });
   counters.forEach(el => obs.observe(el));
+})();
+
+/* ── 11. CUSTOM CURSOR ──────────────────────────────────── */
+(function () {
+  if (REDUCED) return;
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+
+  const dot  = document.createElement('div');
+  dot.id  = 'cursor-dot';
+  const ring = document.createElement('div');
+  ring.id = 'cursor-ring';
+  document.body.append(dot, ring);
+
+  let mx = -200, my = -200, rx = -200, ry = -200, rafId;
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function loop() {
+    rx = lerp(rx, mx, 0.12);
+    ry = lerp(ry, my, 0.12);
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    rafId = requestAnimationFrame(loop);
+  }
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+  });
+
+  document.addEventListener('mousedown', () => document.body.classList.add('cursor-click'));
+  document.addEventListener('mouseup',   () => document.body.classList.remove('cursor-click'));
+
+  // Hover state on interactive elements
+  const hoverSel = 'a, button, .btn, .card, [role="button"], input, select, textarea, label';
+  document.querySelectorAll(hoverSel).forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+
+  // MutationObserver to pick up dynamically added elements
+  const mo = new MutationObserver(() => {
+    document.querySelectorAll(hoverSel).forEach(el => {
+      if (!el._cursorBound) {
+        el._cursorBound = true;
+        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+      }
+    });
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+
+  loop();
+})();
+
+/* ── 12. TEXT SCRAMBLE ON H2 HOVER ─────────────────────── */
+(function () {
+  if (REDUCED) return;
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*';
+
+  function scramble(el) {
+    const original = el.dataset.original || el.textContent;
+    el.dataset.original = original;
+    let frame = 0;
+    const totalFrames = 18;
+    const id = setInterval(() => {
+      el.textContent = original.split('').map((ch, i) => {
+        if (ch === ' ') return ' ';
+        const revealAt = Math.floor((i / original.length) * totalFrames * 0.6);
+        if (frame > revealAt + 3) return ch;
+        return CHARS[Math.floor(Math.random() * CHARS.length)];
+      }).join('');
+      frame++;
+      if (frame > totalFrames) {
+        clearInterval(id);
+        el.textContent = original;
+      }
+    }, 32);
+  }
+
+  document.querySelectorAll('h2').forEach(h2 => {
+    h2.addEventListener('mouseenter', () => scramble(h2));
+  });
+})();
+
+/* ── 13. MAGNETIC BUTTON PULL ───────────────────────────── */
+(function () {
+  if (REDUCED) return;
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+
+  document.querySelectorAll('.btn').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const r = btn.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top  + r.height / 2;
+      const dx = (e.clientX - cx) * 0.3;
+      const dy = (e.clientY - cy) * 0.3;
+      btn.style.transform = `translate(${dx}px, ${dy}px) translateY(-2px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
+})();
+
+/* ── 14. HERO ANNOTATION INJECTION ─────────────────────── */
+(function () {
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+  const ann = document.createElement('div');
+  ann.className = 'hero-annotation';
+  ann.innerHTML = `
+    <svg viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 5 Q30 10 10 30" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <path d="M8 26 L10 32 L16 30" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <span>this is actually<br>what it feels like</span>
+  `;
+  hero.appendChild(ann);
+})();
+
+/* ── 15. STATUS CARD HAND NOTE ──────────────────────────── */
+(function () {
+  const sc = document.querySelector('.status-card');
+  if (!sc) return;
+  const note = document.createElement('span');
+  note.className = 'hand-note';
+  note.textContent = '(still figuring it out)';
+  sc.appendChild(note);
+})();
+
+/* ── 16. KONAMI CODE EASTER EGG ─────────────────────────── */
+(function () {
+  const CODE = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let idx = 0;
+  document.addEventListener('keydown', e => {
+    if (e.key === CODE[idx]) {
+      idx++;
+      if (idx === CODE.length) {
+        idx = 0;
+        // Rain warm particles briefly
+        const overlay = document.createElement('div');
+        overlay.style.cssText = `
+          position:fixed;inset:0;z-index:9997;pointer-events:none;
+          display:flex;align-items:center;justify-content:center;
+          font-family:'Caveat',cursive;font-size:2.5rem;color:#f59e0b;
+          opacity:0;transition:opacity 0.4s;text-align:center;line-height:1.4;
+          text-shadow:0 0 20px rgba(245,158,11,0.6);
+        `;
+        overlay.textContent = '↑↑↓↓←→←→BA\naccidentally created a tiny universe 🌌';
+        document.body.appendChild(overlay);
+        requestAnimationFrame(() => { overlay.style.opacity = '1'; });
+        setTimeout(() => {
+          overlay.style.opacity = '0';
+          setTimeout(() => overlay.remove(), 400);
+        }, 3000);
+      }
+    } else {
+      idx = 0;
+    }
+  });
 })();
