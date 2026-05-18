@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>mpvTube | synapse-dot</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="mpvTube | synapse-dot" />
+<meta property="og:description" content="Search YouTube, pick a quality, play it in mpv. No browser. No ads. Just the video." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://synapse-dot.github.io/projects/mpvtube.html" />
+<link rel="icon" type="image/png" href="/images/logos/logo.png">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+/* ── PROJECT-SPECIFIC STYLES ─────────────────────────── */
+
+.project-hero { padding: 7rem 0 3.5rem; position: relative; }
+
+.project-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 5.2rem);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+}
+
+.project-hero h1 .proj-accent {
+  color: var(--warm);
+  display: inline;
+}
+
+.project-hero .hero-desc {
+  font-size: 1.15rem;
+  color: var(--muted);
+  max-width: 600px;
+  line-height: 1.65;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.project-meta {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+  align-items: center;
+}
+
+.meta-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--border);
+}
+.meta-tag.active   { color: #4ade80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.08); }
+.meta-tag.lang     { color: var(--accent); border-color: var(--border-bright); background: var(--accent-dim); }
+.meta-tag.category { color: var(--warm); border-color: var(--warm-border); background: var(--warm-dim); }
+
+/* ── RESOURCE GRID ──────────────────────────────────── */
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+.resource-card {
+  background: var(--surface);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.resource-card:hover { background: var(--surface-2); }
+.resource-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--warm));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(.23,1,.32,1);
+}
+.resource-card:hover::after { transform: scaleX(1); }
+
+.resource-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.resource-value {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.resource-value:hover { color: var(--warm); }
+.resource-value svg { width: 14px; height: 14px; opacity: 0.6; flex-shrink: 0; }
+
+.resource-clone {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  background: var(--bg);
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  word-break: break-all;
+  user-select: all;
+  cursor: text;
+  transition: border-color 0.2s, color 0.2s;
+}
+.resource-clone:hover { border-color: var(--border-bright); color: var(--accent); }
+
+/* ── INSTALL / RUN STEPS ────────────────────────────── */
+.install-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+@media (max-width: 760px) { .install-grid { grid-template-columns: 1fr; } }
+
+.install-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.install-block::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+}
+.install-block.warm::before { background: var(--warm); }
+
+.install-block h4 {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.install-block h4 svg { width: 14px; height: 14px; }
+
+.cmd-line {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 0.7rem 1rem;
+  margin-bottom: 0.6rem;
+  border-radius: 2px;
+  transition: border-color 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+.cmd-line:last-child { margin-bottom: 0; }
+.cmd-line:hover { border-color: var(--border-bright); }
+
+.cmd-prompt {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--warm);
+  flex-shrink: 0;
+}
+.cmd-text {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text);
+  flex: 1;
+}
+.cmd-note {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.cmd-line .copy-hint {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+.cmd-line:hover .copy-hint { opacity: 0.7; }
+.cmd-line:hover .cmd-note  { opacity: 0; }
+
+/* ── FEATURES ────────────────────────────────────────── */
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  font-size: 0.98rem;
+  color: var(--muted);
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.25s cubic-bezier(.23,1,.32,1);
+}
+.feature-item:hover {
+  background: var(--surface-2);
+  border-left-color: var(--accent);
+  color: var(--text);
+  transform: translateX(4px);
+}
+
+.feature-icon {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
+  padding-top: 1px;
+}
+
+.feature-shortcut {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 0.15rem 0.5rem;
+  flex-shrink: 0;
+  letter-spacing: 0.05em;
+  transition: color 0.2s, border-color 0.2s;
+}
+.feature-item:hover .feature-shortcut {
+  color: var(--warm);
+  border-color: var(--warm-border);
+}
+
+/* Two-column features layout */
+.features-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+@media (max-width: 760px) { .features-cols { grid-template-columns: 1fr; } }
+
+.features-col-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.features-col-label::after { content: ''; flex: 1; height: 1px; background: var(--border); max-width: 60px; }
+
+/* ── CONFIG CARD ─────────────────────────────────────── */
+.config-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 2rem 2.5rem;
+  margin-top: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.config-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--accent-2), var(--warm));
+}
+.config-path {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  color: var(--accent);
+  background: var(--bg);
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border);
+  display: inline-block;
+  margin-top: 0.75rem;
+  border-radius: 2px;
+  letter-spacing: 0.03em;
+}
+.config-note {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* ── REQUIREMENTS ────────────────────────────────────── */
+.req-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.req-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: border-color 0.2s, transform 0.25s cubic-bezier(.23,1,.32,1);
+}
+.req-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-3px);
+}
+
+.req-icon {
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+}
+.req-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.req-version {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+.req-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-top: 0.25rem;
+}
+
+/* ── CONTRIBUTORS ────────────────────────────────────── */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 2rem;
+}
+.team-card {
+  background: var(--surface);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: background 0.2s;
+}
+.team-card:hover { background: var(--surface-2); }
+.team-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.team-handle {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  margin-top: 0.25rem;
+  transition: color 0.2s;
+}
+.team-handle:hover { color: var(--warm); }
+.team-role {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+/* ── COPY TOAST ──────────────────────────────────────── */
+.copy-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--surface-2);
+  border: 1px solid var(--border-bright);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  padding: 0.6rem 1.25rem;
+  z-index: 9000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+}
+.copy-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-logo">
+    <span>synapse-dot</span>
+  </a>
+  <div class="nav-links">
+    <a href="/index.html">Home</a>
+    <a href="/about.html">About</a>
+    <a href="/projects.html" class="active">Projects</a>
+    <a href="/join.html">Contact / Collab</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- ── PROJECT HERO ────────────────────────────────── -->
+  <div class="project-hero">
+    <div class="hero-label">Personal Project</div>
+    <h1>mpv<span class="proj-accent">Tube</span></h1>
+    <p class="hero-desc">
+      Search YouTube, pick a video, choose your exact quality, and play it in mpv —
+      no browser, no ads, no algorithm. Just the video you actually wanted.
+    </p>
+    <div class="project-meta">
+      <span class="meta-tag active">● Active</span>
+      <span class="meta-tag lang">Python</span>
+      <span class="meta-tag category">CLI / TUI / GUI</span>
+      <span class="meta-tag category">yt-dlp + mpv</span>
+    </div>
+    <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+      <a href="https://github.com/synapse-dot/youtube_mpv_app" target="_blank" rel="noopener" class="btn">
+        <span>View on GitHub</span>
+      </a>
+      <a href="https://github.com/synapse-dot/youtube_mpv_app/archive/refs/heads/main.zip" class="btn btn-outline">
+        <span>Download ZIP</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── CORE RESOURCES ──────────────────────────────── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Links</div>
+      <h2>Core Resources</h2>
+    </div>
+    <div class="resource-grid">
+      <div class="resource-card">
+        <span class="resource-label">Repository</span>
+        <a href="https://github.com/synapse-dot/youtube_mpv_app" target="_blank" rel="noopener" class="resource-value">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          synapse-dot/youtube_mpv_app
+        </a>
+        <span class="resource-clone">git clone https://github.com/synapse-dot/youtube_mpv_app.git</span>
+      </div>
+      <div class="resource-card">
+        <span class="resource-label">Latest Release</span>
+        <a href="https://github.com/synapse-dot/youtube_mpv_app/releases" target="_blank" rel="noopener" class="resource-value">
+          Releases →
+        </a>
+      </div>
+      <div class="resource-card">
+        <span class="resource-label">Requirements</span>
+        <a href="https://github.com/synapse-dot/youtube_mpv_app/blob/main/requirements.txt" target="_blank" rel="noopener" class="resource-value">
+          requirements.txt →
+        </a>
+      </div>
+      <div class="resource-card">
+        <span class="resource-label">Issues / Bugs</span>
+        <a href="https://github.com/synapse-dot/youtube_mpv_app/issues" target="_blank" rel="noopener" class="resource-value">
+          Open an Issue →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── REQUIREMENTS ────────────────────────────────── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Dependencies</div>
+      <h2>What You Need</h2>
+    </div>
+    <div class="req-grid">
+      <div class="req-card">
+        <div class="req-icon">🐍</div>
+        <div class="req-name">Python</div>
+        <div class="req-version">3.10 or newer</div>
+        <div class="req-desc">Core runtime. Any 3.10+ install works.</div>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">▶</div>
+        <div class="req-name">mpv</div>
+        <div class="req-version">on PATH (or set manually)</div>
+        <div class="req-desc">The actual media player. mpvTube is just a launcher for it.</div>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">⬇</div>
+        <div class="req-name">yt-dlp</div>
+        <div class="req-version">via requirements.txt</div>
+        <div class="req-desc">Queries YouTube and lists available formats per video.</div>
+      </div>
+      <div class="req-card">
+        <div class="req-icon">📦</div>
+        <div class="req-name">ffmpeg</div>
+        <div class="req-version">optional on Linux, auto-install on Windows</div>
+        <div class="req-desc">Format merging. Windows users get a one-click install button in the GUI.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── INSTALL & RUN ────────────────────────────────── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Setup</div>
+      <h2>Install &amp; Run</h2>
+    </div>
+    <div class="install-grid">
+
+      <div class="install-block">
+        <h4>
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 2a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H2a2 2 0 01-2-2V2zm3.5 1a.5.5 0 000 1h1a.5.5 0 000-1h-1zm0 2a.5.5 0 000 1h5a.5.5 0 000-1h-5zM3 8a.5.5 0 01.5-.5h9a.5.5 0 010 1h-9A.5.5 0 013 8zm0 2a.5.5 0 01.5-.5h6a.5.5 0 010 1h-6a.5.5 0 01-.5-.5z"/></svg>
+          Linux
+        </h4>
+        <div class="cmd-line" data-copy="git clone https://github.com/synapse-dot/youtube_mpv_app.git">
+          <span class="cmd-prompt">$</span>
+          <span class="cmd-text">git clone https://github.com/synapse-dot/youtube_mpv_app.git</span>
+          <span class="copy-hint">copy</span>
+        </div>
+        <div class="cmd-line" data-copy="cd youtube_mpv_app">
+          <span class="cmd-prompt">$</span>
+          <span class="cmd-text">cd youtube_mpv_app</span>
+          <span class="copy-hint">copy</span>
+        </div>
+        <div class="cmd-line" data-copy="chmod +x install.sh && ./install.sh">
+          <span class="cmd-prompt">$</span>
+          <span class="cmd-text">chmod +x install.sh &amp;&amp; ./install.sh</span>
+          <span class="copy-hint">copy</span>
+        </div>
+        <div class="cmd-line" data-copy="python main.py">
+          <span class="cmd-prompt">$</span>
+          <span class="cmd-text">python main.py</span>
+          <span class="cmd-note">TUI (default)</span>
+          <span class="copy-hint">copy</span>
+        </div>
+        <div class="cmd-line" data-copy="python main.py --gui">
+          <span class="cmd-prompt">$</span>
+          <span class="cmd-text">python main.py --gui</span>
+          <span class="cmd-note">GUI mode</span>
+          <span class="copy-hint">copy</span>
+        </div>
+        <div class="cmd-line" data-copy="python main.py --min">
+          <span class="cmd-prompt">$</span>
+          <span class="cmd-text">python main.py --min</span>
+          <span class="cmd-note">Minimal TUI</span>
+          <span class="copy-hint">copy</span>
+        </div>
+      </div>
+
+      <div class="install-block warm">
+        <h4>
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M6.555 1.375L0 12.803h1.512l.74-1.259h4.496l.74 1.259H9l-6.555-11.428h-1.89zm-1.89 8.92l1.89-3.21 1.89 3.21H4.665zM8 1v11h1.5V6.5L12 11l2.5-4.5V12H16V1h-1.5L12 5.5 9.5 1H8z"/></svg>
+          Windows
+        </h4>
+        <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1.25rem; line-height:1.6;">
+          Use the included batch helper. If conda is available it creates a
+          <code style="font-size:0.78rem; color:var(--accent);">youtube_mpv</code> env;
+          otherwise it falls back to a local <code style="font-size:0.78rem; color:var(--accent);">.venv</code>.
+        </p>
+        <div class="cmd-line" data-copy="cmd /c run.bat">
+          <span class="cmd-prompt">&gt;</span>
+          <span class="cmd-text">cmd /c run.bat</span>
+          <span class="copy-hint">copy</span>
+        </div>
+        <p style="font-size:0.85rem; color:var(--muted); margin-top:1.25rem; line-height:1.6;">
+          If mpv isn't on your PATH, set it in the small field at the top of the app.
+          The GUI's <strong style="color:var(--text);">Test mpv</strong> button validates and saves the path for you.
+        </p>
+        <p style="font-size:0.85rem; color:var(--muted); margin-top:0.75rem; line-height:1.6;">
+          <strong style="color:var(--text);">Install ffmpeg (auto)</strong> button installs
+          <code style="font-size:0.78rem; color:var(--accent);">ffmpeg.exe</code> to
+          <code style="font-size:0.78rem; color:var(--accent);">~/.youtube_mpv/bin</code> automatically.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── FEATURES ──────────────────────────────────────── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Features</div>
+      <h2>What It Can Do</h2>
+    </div>
+    <div class="features-cols">
+
+      <div>
+        <div class="features-col-label">TUI (Textual)</div>
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-icon">↵</span>
+            Interactive YouTube search within the terminal
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">↕</span>
+            Browse results with arrow keys
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">◈</span>
+            Choose video and audio quality separately
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">⧖</span>
+            Search history
+            <span class="feature-shortcut">h</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">◇</span>
+            Bookmarks
+            <span class="feature-shortcut">b</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">/</span>
+            Quick search jump
+            <span class="feature-shortcut">/</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">▶</span>
+            mpv auto-launched, app waits and returns
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="features-col-label">GUI / General</div>
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-icon">⎋</span>
+            No browser, no ads, no recommendations rabbit hole
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">✓</span>
+            <strong>Test mpv</strong> button validates path and saves config
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">⬇</span>
+            One-click ffmpeg install on Windows
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">◈</span>
+            Three launch modes: TUI, GUI, minimal TUI
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">⚙</span>
+            Persistent config at <code style="font-size:0.78rem;">~/.config/mpvTube/</code>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">↑</span>
+            Format passed as <code style="font-size:0.78rem;">--ytdl-format</code> directly to mpv
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CONFIG ─────────────────────────────────────────── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Configuration</div>
+      <h2>Where It Lives</h2>
+    </div>
+    <div class="config-card">
+      <p style="color:var(--muted); font-size:0.95rem;">Configuration is stored as JSON and persists between sessions:</p>
+      <code class="config-path">~/.config/mpvTube/config.json</code>
+      <p class="config-note">
+        The config stores your mpv binary path, any custom flags, and other preferences set through the GUI or TUI.
+        You can also edit it directly — it's plain JSON.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── CONTRIBUTORS ────────────────────────────────────── -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">Team</div>
+      <h2>Contributors</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-name">Synapse</div>
+        <div class="team-role">Creator &amp; Maintainer</div>
+        <a href="https://github.com/synapse-dot" target="_blank" rel="noopener" class="team-handle">@synapse-dot →</a>
+      </div>
+      <div class="team-card">
+        <div class="team-name">userx1000</div>
+        <div class="team-role">Contributor</div>
+        <a href="https://github.com/userx1000" target="_blank" rel="noopener" class="team-handle">@userx1000 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────── -->
+  <div class="cta-section">
+    <span class="corner-mark">OPEN SOURCE</span>
+    <h2>Want to contribute?</h2>
+    <p>Open an issue, submit a pull request, or just star the repo if it helped you escape YouTube's browser.</p>
+    <a href="https://github.com/synapse-dot/youtube_mpv_app" target="_blank" rel="noopener" class="btn">
+      <span>Contribute on GitHub</span>
+    </a>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+      <p>&copy; 2026 synapse-dot</p>
+      <p style="font-size:0.65rem; opacity:0.6;">Curious &bull; Knowledge-seeking</p>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/synapse-dot" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/mcsms-org" target="_blank" rel="noopener">MCSMS Org</a>
+      <a href="mailto:felixx.a.wayne32@gmail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Copy-to-clipboard toast -->
+<div class="copy-toast" id="copyToast">copied to clipboard</div>
+
+<script src="/main.js" defer></script>
+<script>
+  /* Command line click-to-copy */
+  (function () {
+    const toast = document.getElementById('copyToast');
+    let toastTimer;
+
+    document.querySelectorAll('.cmd-line[data-copy]').forEach(line => {
+      line.addEventListener('click', () => {
+        const text = line.dataset.copy;
+        navigator.clipboard.writeText(text).then(() => {
+          clearTimeout(toastTimer);
+          toast.classList.add('show');
+          toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+        });
+      });
+    });
+
+    /* Also make clone box click-to-copy */
+    document.querySelectorAll('.resource-clone').forEach(el => {
+      el.style.cursor = 'pointer';
+      el.title = 'click to copy';
+      el.addEventListener('click', () => {
+        navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+          clearTimeout(toastTimer);
+          toast.classList.add('show');
+          toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>
